@@ -102,7 +102,7 @@ public class MainWindow : Object
 			tabs.add_button_tooltip = _("Connect to a server");
 			tabs.add_button_visible = false;
 			tabs.allow_drag = true;
-			tabs.show_icons = true;
+			//  tabs.show_icons = true;
 			tabs.show_tabs = settings.get_bool("show_tabs");
 			tabs.new_tab_requested.connect(new_tab_requested);
 
@@ -412,8 +412,8 @@ public class MainWindow : Object
 	}
 
 	public void new_tab_requested () {
-		var dialog = new Dialog.with_buttons(_("New Connection"), window,
-		                                     DialogFlags.DESTROY_WITH_PARENT,
+		var dialog = new Gtk.Dialog.with_buttons(_("New Connection"), window,
+		                                     Gtk.DialogFlags.DESTROY_WITH_PARENT,
 		                                     _("Connect"), Gtk.ResponseType.ACCEPT,
 		                                     "_Cancel", Gtk.ResponseType.CANCEL);
 		Gtk.Box content = dialog.get_content_area() as Gtk.Box;
