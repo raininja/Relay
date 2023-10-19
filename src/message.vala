@@ -48,7 +48,7 @@ public class Message : GLib.Object {
             return;
 		try{
 			message = _message.validate() ? _message : _message.escape("\b\f\n\r\t\'"); 
-		}catch(RegexError e) {
+		} catch (RegexError e) {
 			message = _message;
 		}
         parse_regex();
