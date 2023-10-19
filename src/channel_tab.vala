@@ -47,7 +47,8 @@ public class ChannelTab : GLib.Object {
 	public string channel_url = "";
 	public bool needs_spacer = false;
 
-	public static TimeVal timeval = TimeVal();
+	//  public static int64 timeval = get_real_time();
+	public TimeVal timeval = TimeVal();
 	public static int timestamp_seconds = 180;
 	private long last_timestamp = 0;
 	private string last_user = "";
@@ -364,7 +365,7 @@ public class ChannelTab : GLib.Object {
 		if (!MainWindow.settings.get_bool("show_datestamp"))
 			return false;
 		
-		timeval.get_current_time();
+		//  timeval.get_real_time();
 		long current = timeval.tv_sec;
 		if (current - last_timestamp > timestamp_seconds) {
 			var local = new GLib.DateTime.now_local();
@@ -558,6 +559,7 @@ public class ChannelTab : GLib.Object {
 				return false;
 			
 			Granite.Services.System.open_uri(link);
+			//  AppInfo.launch_default_for_uri(link, null, );
 		}
 		return false;
 	}

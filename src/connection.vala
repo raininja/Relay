@@ -59,7 +59,7 @@ public class Connection : Object
  
 			SocketClient client = new SocketClient ();
 			client.set_tls(server.encryption);
-			client.set_tls_validation_flags(TlsCertificateFlags.UNKNOWN_CA);
+			//  client.set_tls_validation_flags(TlsCertificateFlags.UNKNOWN_CA);
 			// Resolve hostname to IP address:
 			SocketConnection conn = client.connect (new InetSocketAddress (address, (uint16) server.port));
 			input_stream = new DataInputStream (conn.input_stream);

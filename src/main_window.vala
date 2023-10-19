@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+//  #!/bin/env -S vala -pkg gee-0.8
 
 using GLib;
 using Gtk;
@@ -24,9 +25,10 @@ using Gdk;
 using Gee;
 using Granite;
 using Pango;
-using Unity;
+using Unity; 
 
-public class MainWindow : Object
+//  public class MainWindow : Object
+public class MainWindow : Gtk.ApplicationWindow
 {
 	//const string UI_FILE = Config.PACKAGE_DATA_DIR + "/ui/" + "relay.ui";
 	public const string UI_FILE = "ui/relay.ui";
@@ -67,7 +69,7 @@ public class MainWindow : Object
 	public static SqlClient sql_client = SqlClient.get_instance();
 	public static Settings settings = new Settings();
 	public static ServerManager server_manager = new ServerManager();
-	public static Unity.LauncherEntry launcher = Unity.LauncherEntry.get_for_desktop_id(Config.PACKAGE_NAME + ".desktop");
+	public static Unity.LauncherEntry launcher = Unity.LauncherEntry.get_for_desktop_id(Constants.RELEASE_NAME + ".desktop");
 
 	Gee.HashMap<int, ChannelTab> outputs = new Gee.HashMap<int, ChannelTab> ();
 	Gee.HashMap<string, Connection> clients = new Gee.HashMap<string, Connection> (); 
@@ -206,7 +208,7 @@ public class MainWindow : Object
 
 			set_up_add_sever(builder);
 
-			toolbar.set_title(app.program_name);
+			toolbar.set_title(Constants.PROGRAM_NAME);
 
 			if (!Relay.on_kde)
 				toolbar.show_close_button = true;
@@ -242,11 +244,9 @@ public class MainWindow : Object
 
 			Gtk.MenuItem close_all = new Gtk.MenuItem.with_label(_("Close All"));
 			close_all.activate.connect( ()=> {
-				foreach(var item in outputs) {
-					if(item != null && item.tab != null) 
-						tabs.remove_tab(item.tab);
-				}
+				outputs.entries.clear();
 			});
+
 			Gtk.MenuItem new_tab = new Gtk.MenuItem.with_label(_("New Tab"));
 			new_tab.activate.connect(new_tab_requested);
 
@@ -342,7 +342,7 @@ public class MainWindow : Object
 			output.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
 			output.set_left_margin(IRC.USER_WIDTH);
 			output.set_indent(IRC.USER_WIDTH * -1);
-			output.override_font(FontDescription.from_string("Inconsolata 9"));
+			output.override_font(FontDescription.from_string("Inconsolata 12"));
 
 
 			
@@ -484,7 +484,7 @@ public class MainWindow : Object
 			channel_subject.hide();
 			channel_users.hide();
 			input.hide();
-			toolbar.set_title(app.program_name);
+			toolbar.set_title(Constants.PROGRAM_NAME);
 			toolbar.set_has_subtitle(false);
 			toolbar.set_subtitle("");
 			paste.hide();
@@ -836,12 +836,15 @@ public class MainWindow : Object
 		}
 	}
 
-	public void refresh_icon (int add) {
+/* Unity function.  refreshes icon? */
+
+    public void refresh_icon (int add) {
 		launcher.count += add;
 		launcher.count_visible = (launcher.count > 0);
 		launcher.urgent = true;
 		launcher.urgent = false;
 	}
+
 
 	public void send_text_out (string text) {
 		if (current_tab == -1 || !outputs.has_key(current_tab) || text == "")
@@ -969,7 +972,7 @@ public class MainWindow : Object
 		var tab = new Widgets.Tab();
 		tab.icon = null;
 		tab.label = _("Welcome");
-		toolbar.set_title(app.program_name);
+		toolbar.set_title(Constants.PROGRAM_NAME);
 		toolbar.set_subtitle("");
 		toolbar.set_has_subtitle(false);
 		tab.page = welcome;

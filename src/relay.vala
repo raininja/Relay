@@ -18,7 +18,7 @@
 
 
 TERMS OF USE - EASING EQUATIONS
-pen source under  the http://www.opensource.org/licenses/bsd-license.php BSD License. <br>
+open source under  the http://www.opensource.org/licenses/bsd-license.php BSD License. <br>
 
 Copyright © 2001 Robert Penner
 All rights reserved.
@@ -49,12 +49,14 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-using X;
+//  using X; // refactor to GTK thread
 using GLib;
 using Gee;
 using Gtk;
+//  using Constants; 
 
-public class Relay : Granite.Application {
+//  public class Relay : Granite.Application { ::DEPRECATED
+public class Relay : Gtk.Application {
 
         private MainWindow window = null;
         public string[] args;
@@ -63,53 +65,56 @@ public class Relay : Granite.Application {
 	    public static bool on_ubuntu = false;
         public static bool on_kde = false;
         public static bool is_light_theme = false;
-        public static string path;
+        public static string local_path; // converted from "path" to avoid conflict with gtk built-in
         public static bool no_theme;
 
     
-        construct {
+        construct  {
+
+                //  var program_name = "Relay";
+                //  var exec_name = "relay";
             
-            program_name = "Relay";
-            exec_name = "relay";
-
-            build_data_dir = Config.PACKAGE_DATA_DIR;
-            build_pkg_data_dir = Config.GETTEXT_PACKAGE;
-            build_version = Config.VERSION;
-
-            app_years = "2015";
-            app_icon = "relay";
-            app_launcher = "relay.desktop";
-            application_id = "net.launchpad.relay";
-
-            main_url = "https://poisonpacket.wordpress.com/relay/";
-            bug_url = "https://bugs.launchpad.net/relay";
-            help_url = "https://poisonpacket.wordpress.com/relay/";
-            translate_url = "https://translations.launchpad.net/relay";
-
-            about_authors = { "Kyle Agronick <agronick@gmail.com>" };
-            about_documenters = { "Kyle Agronick <agronick@gmail.com>" };
-            about_artists = { "Kyle Agronick (App) <agronick@gmail.com>" };
-            about_comments = "IRC Client for the Modern Desktop";
-            about_translators = "translator-credits";
-            about_license_type = Gtk.License.GPL_3_0;
-
-            set_options(); 
-
-            Intl.setlocale(LocaleCategory.MESSAGES, "");
-            Intl.textdomain(Config.GETTEXT_PACKAGE); 
-            Intl.bind_textdomain_codeset(Config.GETTEXT_PACKAGE, "utf-8"); 
-            Intl.bindtextdomain(Config.GETTEXT_PACKAGE, "./locale");
+                //  here, import of Config.vala[.base] values is needed. is "Config" a standard Vala file schema?
+                // actually, the namespace was Constants, not Config!
+                var build_data_dir = Constants.PKGDATADIR;
+                var build_pkg_data_dir = Constants.GETTEXT_PACKAGE;
+                var build_version = Constants.VERSION;
             
-    }
+                var app_years = "2023";
+                var app_icon = "relay";
+                var app_launcher = "relay.desktop";
+                var application_id = "org.agronick.relay";
+            
+                var main_url = "https://poisonpacket.wordpress.com/relay/";
+                var bug_url = "https://bugs.launchpad.net/relay";
+                var help_url = "https://poisonpacket.wordpress.com/relay/";
+                var translate_url = "https://translations.launchpad.net/relay";
+            
+                //  GLib.Array about_authors = { "Kyle Agronick <agronick@gmail.com>", "dan denkijin <dandenkijin@gmail.com>" };
+                //  struct about_documenters = { string "Kyle Agronick <agronick@gmail.com>" };
+                //  var about_artists = { "Kyle Agronick (App) <agronick@gmail.com>" };
+                var about_comments = "IRC Client for the Modern Desktop";
+                var about_translators = "translator-credits";
+                int about_license_type = Gtk.License.GPL_3_0;
+            
+                //  set_options();
+            
+                Intl.setlocale(LocaleCategory.MESSAGES, "");
+                Intl.textdomain(build_pkg_data_dir); 
+                Intl.bind_textdomain_codeset(Constants.GETTEXT_PACKAGE, "utf-8"); 
+                Intl.bindtextdomain(Constants.GETTEXT_PACKAGE, "./locale");
+            
+        }
     
     public const GLib.OptionEntry[] app_options = {
         { "no-theme", 't', 0, OptionArg.NONE, out no_theme, "Disable switching to a different theme", null },
         { null }
     };
  
+/*  considered moving to a main.vala  */
     public static void main (string[] args) {
 
-        path = args[0];
+        local_path = args[0];
 
         var context = new OptionContext ();
         context.add_main_entries (Relay.app_options, "relay"); 
@@ -120,13 +125,14 @@ public class Relay : Granite.Application {
             warning (e.message);
         }
         
-        X.init_threads ();
+        //  X.init_threads ();
         
         GLib.Log.set_default_handler(handle_log);
 
         var main = new Relay();
         main.run(args);
     }
+
 
     public override void activate () {
 
@@ -162,7 +168,7 @@ public class Relay : Granite.Application {
                            "src/" + name,
                             "../src/" + name,
                             "./*/src/" + name,
-                            Config.PACKAGE_DATA_DIR + "/" + name,};
+                            Constants.PKGDATADIR + "/" + name,};
         foreach(string check in checks) {                   
             File file = File.new_for_path (check);
             if (file.query_exists())
@@ -212,10 +218,10 @@ public class Relay : Granite.Application {
 			return;
         Idle.add( ()=> {
             Gtk.MessageDialog dialog = new Gtk.MessageDialog (MainWindow.window, 
-                                                       Gtk.DialogFlags.MODAL, 
-                                                       Gtk.MessageType.WARNING, 
-                                                       Gtk.ButtonsType.OK, 
-                                                       _(error_msg));
+                                                              Gtk.DialogFlags.MODAL, 
+                                                              Gtk.MessageType.WARNING, 
+                                                              Gtk.ButtonsType.OK, 
+                                                              _(error_msg));
             dialog.response.connect ((response_id) => {
 			    error_open = false;
                 dialog.destroy();
@@ -226,7 +232,7 @@ public class Relay : Granite.Application {
         });
     }
 
-    //Dark themes need light text
+    //Dark themes need light text, easing functions used here
     public static bool set_color_mode (Gdk.RGBA color) {
         is_light_theme = 0.2126 * color.red + 0.7152 * color.green + 0.0722 * color.blue  < 0.4;
         return is_light_theme;
