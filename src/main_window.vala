@@ -208,7 +208,7 @@ public class MainWindow : Gtk.ApplicationWindow
 
 			set_up_add_sever(builder);
 
-			toolbar.set_title(Constants.PROGRAM_NAME);
+			toolbar.set_title(Constants.RELEASE_NAME);
 
 			if (!Relay.on_kde)
 				toolbar.show_close_button = true;
@@ -484,7 +484,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			channel_subject.hide();
 			channel_users.hide();
 			input.hide();
-			toolbar.set_title(Constants.PROGRAM_NAME);
+			toolbar.set_title(Constants.RELEASE_NAME);
 			toolbar.set_has_subtitle(false);
 			toolbar.set_subtitle("");
 			paste.hide();
@@ -972,7 +972,7 @@ public class MainWindow : Gtk.ApplicationWindow
 		var tab = new Widgets.Tab();
 		tab.icon = null;
 		tab.label = _("Welcome");
-		toolbar.set_title(Constants.PROGRAM_NAME);
+		toolbar.set_title(Constants.RELEASE_NAME);
 		toolbar.set_subtitle("");
 		toolbar.set_has_subtitle(false);
 		tab.page = welcome;
