@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/raininja/Relay">
+    <file compressed="true" preprocess="xml-stripblanks">assets/channel-loading.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/help-info-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/list-remove-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/server-icon.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/user-idle.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/list-add-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/mail-unread.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/server-icon-light.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/system-users.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">assets/user-offline.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/relay.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/server_window.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/settings_window.ui</file>
+    <file>assets/paste.png</file>
+    <file>assets/manage-servers.png</file>
+    <file>assets/connect-server.png</file>
+    <file>assets/saved-server.png</file>
+  </gresource>
+</gresources>
+

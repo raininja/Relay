@@ -46,6 +46,8 @@ public class IRC{
 	public const string RPL_AUTHEDAS = "330";
 	public const string RPL_NOTOPIC = "331";
 	public const string RPL_TOPIC = "332";
+	// public const string RPL_INVITING = "341"
+	// public const string 
 	public const string RPL_VERSION = "351";
 	public const string RPL_NAMREPLY = "353";
 	public const string RPL_ENDOFNAMES = "366";
@@ -97,4 +99,3 @@ public class IRC{
 		return name;
 	}
 }
-

@@ -1,10 +1,10 @@
 cfg_Relay = configuration_data()
 cfg_Relay.set('DATADIR', join_paths(get_option('prefix'),get_option('datadir')))
-cfg_Relay.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('datadir'),'Relay'))
-cfg_Relay.set('GETTEXT_PACKAGE', 'Relay')
+cfg_Relay.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay'))
+cfg_Relay.set('GETTEXT_PACKAGE', 'com.github.raininja.relay')
 cfg_Relay.set('RELEASE_NAME', 'Relay')
 cfg_Relay.set('PREFIX', get_option('prefix'))
-cfg_Relay.set('VERSION', '1.0.0')
+cfg_Relay.set('VERSION', '1.0.2')
 cfg_Relay.set('TESTSRCDIR', meson.source_root())
 
 cfgfile_1 = configure_file(
@@ -47,7 +47,19 @@ Relay_sources += ['settings.vala']
 Relay_sources += ['sqlclient.vala']
 Relay_link_args = ['-rdynamic']
 
-executable('Relay',Relay_sources,
+#load gnome module 
+gnome = import('gnome')
+
+# Tell meson where to find our resources file and to compile it as a GResource
+gresource = gnome.compile_resources(
+    'gresource',
+    'asset_bundle.xml',
+    source_dir: 'src'
+)
+
+executable('Relay',
+    Relay_sources,
+    gresource,
     dependencies: Relay_deps,
     link_args: Relay_link_args,
     install: true)

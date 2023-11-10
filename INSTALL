@@ -30,5 +30,5 @@ cd build
 make
 sudo make install
 
-If you want to use the program without installing you must install the settings gsettings xml file in /data/org.agronick.relay.gschema.xml
+If you want to use the program without installing you must install the settings gsettings xml file in /data/com.github.raininja.relay.gschema.xml
 Running make install does this automatically. 

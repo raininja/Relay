@@ -75,7 +75,7 @@ public class Relay : Gtk.Application {
                 //  var exec_name = "relay";
             
                 //  here, import of Config.vala[.base] values is needed. is "Config" a standard Vala file schema?
-                // actually, the namespace was Constants, not Config!
+                // actually, the namespace was Constants, not Config! why the config.vapa.base and config.vapi??
                 var build_data_dir = Constants.PKGDATADIR;
                 var build_pkg_data_dir = Constants.GETTEXT_PACKAGE;
                 var build_version = Constants.VERSION;
@@ -83,7 +83,7 @@ public class Relay : Gtk.Application {
                 var app_years = "2023";
                 var app_icon = "relay";
                 var app_launcher = "relay.desktop";
-                var application_id = "org.agronick.relay";
+                var application_id = "com.github.raininja.relay";
             
                 var main_url = "https://poisonpacket.wordpress.com/relay/";
                 var bug_url = "https://bugs.launchpad.net/relay";
@@ -163,19 +163,20 @@ public class Relay : Gtk.Application {
         Gtk.main ();
     }
 
-    public static string get_asset_file (string name) {
-        string[] checks = {"./" + name,
-                           "src/" + name,
-                            "../src/" + name,
-                            "./*/src/" + name,
-                            Constants.PKGDATADIR + "/" + name,};
-        foreach(string check in checks) {                   
-            File file = File.new_for_path (check);
-            if (file.query_exists())
-                return check;
-        }
-        error("Unable to find asset file: " + name);
-    }
+    // Here is the borken code that checks for the asset file that doesn't seem to work
+    //  public static string get_asset_file (string name) {
+        //  string[] checks = {"./" + name,
+                        //     "src/" + name,
+                            //  "../src/" + name,
+                            //  "./*/src/" + name,
+                            //  Constants.PKGDATADIR + name};
+        //  foreach(string check in checks) {                   
+            //  File file = File.new_for_path (check);
+            //  if (file.query_exists())
+                //  return check;
+        //  }
+        //  error("Unable to find asset file: " + name);
+    //  }
 
     public static void handle_log (string? log_domain, LogLevelFlags log_levels, string message) {
         string prefix = "";

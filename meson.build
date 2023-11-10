@@ -1,7 +1,7 @@
-project('org.agronick.relay',
+project('com.github.raininja.relay',
   ['c','vala'])
 
-add_global_arguments('-DGETTEXT_PACKAGE="org.agronick.relay"',language: 'c')
+add_global_arguments('-DGETTEXT_PACKAGE="com.github.raininja.relay"', language: 'c')
 
 find_program ('glib-compile-schemas')
 atk_dep = dependency('atk')
@@ -25,12 +25,14 @@ unity_dep = dependency('unity')
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required: true)
 
+# install_subdir('assets', install_dir:join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay'))
+# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay','assets'),join_paths(meson.current_source_dir(),'src/assets','','*'))
 
-meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'org.agronick.relay'),join_paths(meson.current_source_dir(),'data/local','','*'))
+# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay'),join_paths(meson.current_source_dir(),'data/local','','*'))
 
-meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'doc','org.agronick.relay'),join_paths(meson.current_source_dir(),'doc','','*'))
+# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'doc','com.github.raininja.relay'),join_paths(meson.current_source_dir(),'doc','','*'))
 
-install_data('data/relay.desktop',install_dir:join_paths(get_option('prefix'),get_option('datadir'),'applications'))
-install_data('data/org.agronick.relay.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
-meson.add_install_script('meson_scripts/install_schemas.sh')
+# install_data('data/relay.desktop',install_dir:join_paths(get_option('prefix'),get_option('datadir'), 'applications'))
+# install_data('data/com.github.raininja.relay.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
+# meson.add_install_script('meson_scripts/install_schemas.sh')
 subdir('src')

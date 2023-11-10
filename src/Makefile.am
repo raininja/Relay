@@ -28,7 +28,7 @@ appicon_DATA = ui/relay.svg
 desktopdir = $(datadir)/applications
 desktop_DATA = ../data/relay.desktop
 
-gsettings_SCHEMAS = ../data/org.agronick.relay.gschema.xml
+gsettings_SCHEMAS = ../data/com.github.raininja.relay.gschema.xml
 @GSETTINGS_RULES@
 
 AM_CPPFLAGS = \
@@ -56,12 +56,12 @@ relay_SOURCES = \
     connection.vala \
     rich_text.vala \
     drag_file.vala \
-    org.github.agronick.relay \
+    com.github.agronick.relay \
     settings.vala \
     main_entry.vala
 
 relay_VALAFLAGS =  \
-    -X -DGETTEXT_PACKAGE="relay" --target-glib 2.32 --pkg unity --pkg gee-0.8 --pkg x11 --pkg gtk+-3.0 --pkg glib-2.0 --pkg granite --pkg sqlite3
+    -X -DGETTEXT_PACKAGE="relay" --target-glib 2.32 --pkg unity --pkg gee-0.8 --pkg gtk+-3.0 --pkg glib-2.0 --pkg granite --pkg sqlite3
 
 relay_LDFLAGS = \
 	 -lm -lX11 -lglib-2.0

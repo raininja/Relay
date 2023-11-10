@@ -25,7 +25,7 @@ using Gee;
 public class Connection : Object
 {
 
-	public const uint16 DEFAULT_PORT = 6667;
+	public const uint16 DEFAULT_PORT = 6667; /*default port also defined in irc.vala */
 	private DataInputStream input_stream;
 	private DataOutputStream output_stream;
 	public ChannelTab server_tab;
@@ -167,7 +167,7 @@ public class Connection : Object
 			case IRC.RPL_LUSEROP:
 			case IRC.RPL_LUSERUNKNOWN:
 			case IRC.RPL_LUSERCHANNELS:
-			case IRC.RPL_UMODEIS: //maybe atab
+			case IRC.RPL_UMODEIS: //maybe a tab
 			case IRC.RPL_SERVLIST:
 			case IRC.RPL_ENDOFSTATS:
 			case IRC.RPL_STATSLINKINFO:

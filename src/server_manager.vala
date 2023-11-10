@@ -56,9 +56,9 @@ public class ServerManager : Object
 		current_server = null;
 		var builder = new Builder();
 		try{
-			builder.add_from_file(Relay.get_asset_file(MainWindow.UI_FILE_SERVERS));
+			builder.add_from_resource(MainWindow.UI_FILE_SERVERS);
 		} catch (Error e){
-			error("Unable to load UI file " + Relay.get_asset_file(MainWindow.UI_FILE_SERVERS));
+			error("Unable to load UI file " + MainWindow.UI_FILE_SERVERS);
 		}
 
 		window = builder.get_object ("window") as Gtk.Window;
@@ -91,9 +91,9 @@ public class ServerManager : Object
 		servers.row_selected.connect(clear_row);
 
 		var add_server = new Gtk.Button();
-		add_server.image = new Image.from_file(Relay.get_asset_file("assets/list-add-symbolic.svg"));
+		add_server.image = new Image.from_resource("/com/github/raininja/assets/list-add-symbolic.svg");
 		var remove_server = new Gtk.Button();
-		remove_server.image = new Image.from_file(Relay.get_asset_file("assets/list-remove-symbolic.svg"));
+		remove_server.image = new Image.from_resource("/com/github/raininja/assets/list-remove-symbolic.svg");
 		server_btns.pack_end(add_server, false, false, 0);
 		server_btns.pack_end(remove_server, false, false, 0);
 

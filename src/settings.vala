@@ -34,7 +34,7 @@ public class Settings : GLib.Object {
     public signal void show_hide_tabs(bool show);
     
     construct {
-        settings = new GLib.Settings("org.agronick.relay");
+        settings = new GLib.Settings("com.github.raininja.relay");
         set_colors_defaults();
     }
     
@@ -45,9 +45,9 @@ public class Settings : GLib.Object {
         }
 		var builder = new Builder();
         try {
-		    builder.add_from_file(Relay.get_asset_file(MainWindow.UI_FILE_SETTINGS));
+		    builder.add_from_resource(MainWindow.UI_FILE_SETTINGS);
 		} catch (Error e){
-			error("Unable to load UI file " + Relay.get_asset_file(MainWindow.UI_FILE_SETTINGS));
+			error("Unable to load UI file " + MainWindow.UI_FILE_SETTINGS);
 		}
         window = builder.get_object ("window") as Gtk.Window;
         

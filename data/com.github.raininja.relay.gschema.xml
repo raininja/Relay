@@ -1,5 +1,5 @@
 <schemalist>
-  <schema path="/org/agronick/relay/" id="org.agronick.relay">
+  <schema path="/com/github/raininja/relay/" id="com.github.raininja.relay">
 
     <key name="show-animations" type="b">
       <default>true</default>

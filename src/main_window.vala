@@ -30,11 +30,13 @@ using Unity;
 //  public class MainWindow : Object
 public class MainWindow : Gtk.ApplicationWindow
 {
-	//const string UI_FILE = Config.PACKAGE_DATA_DIR + "/ui/" + "relay.ui";
-	public const string UI_FILE = "ui/relay.ui";
-	public const string UI_FILE_SERVERS = "ui/server_window.ui";
-	public const string UI_FILE_SETTINGS = "ui/settings_window.ui";
-
+	//  public const string UI_FILE = Constants.PKGDATADIR + "/ui/" + "relay.ui";
+	//  public const string UI_FILE_SERVERS = Constants.PKGDATADIR + "ui/server_window.ui";
+	//  public const string UI_FILE_SETTINGS = Constants.PKGDATADIR + "ui/settings_window.ui";
+	public const string UI_FILE = "/com/github/raininja/Relay/ui/relay.ui";
+	public const string UI_FILE_SERVERS = "/com/github/raininja/Relay/ui/server_window.ui";
+	public const string UI_FILE_SETTINGS = "/com/github/raininja/Relay/ui/settings_window.ui";
+ 
 
 	Relay app;
 	public static Gtk.Window window;
@@ -81,12 +83,16 @@ public class MainWindow : Gtk.ApplicationWindow
 		try {
 			app = application;
 
-			inactive_channel = new Pixbuf.from_file(Relay.get_asset_file("assets/user-offline.svg"));
-			active_channel = new Pixbuf.from_file(Relay.get_asset_file("assets/user-idle.svg"));
-			loading_channel = new Pixbuf.from_file(Relay.get_asset_file("assets/channel-loading.svg"));
+			//  inactive_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/user-offline.svg"));
+			//  active_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/user-idle.svg"));
+			//  loading_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/channel-loading.svg"));
 
+			inactive_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/user-offline.svg");
+			active_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/user-idle.svg");
+			loading_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/channel-loading.svg");
+			
 			var builder = new Builder ();
-			builder.add_from_file (Relay.get_asset_file(UI_FILE));
+			builder.add_from_resource (UI_FILE);
 			builder.connect_signals(this);
 
 			var settings_btn = builder.get_object("settings_btn") as Button;
@@ -118,15 +124,16 @@ public class MainWindow : Gtk.ApplicationWindow
 			var nb_wrapper = builder.get_object("notebook_wrapper") as Box;
 			nb_wrapper.pack_start(tabs, true, true, 0); 
 			tabs.show_all();
-			channel_tab_icon_new_msg = new Pixbuf.from_file(Relay.get_asset_file("assets/mail-unread.svg"));
-
+			//  channel_tab_icon_new_msg = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/mail-unread.svg"));
+			channel_tab_icon_new_msg = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/mail-unread.svg");
 			//Slide out panel
 			panel = builder.get_object("panel") as Paned;
 			var server_list_container = builder.get_object("server_list_container") as Box;
 			server_list_container.pack_start(servers, true, true, 0);
 
 			//Slide out panel button
-			Image icon = new Image.from_file(Relay.get_asset_file("assets/server-icon" + (Relay.is_light_theme ? "-light" : "") + ".svg"));
+			//  Image icon = new Image.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/server-icon" + (Relay.is_light_theme ? "-light" : "") + ".svg"));
+			Image icon = new Image.from_resource("/com/github/raininja/Relay/assets/server-icon" + (Relay.is_light_theme ? "-light" : "") + ".svg");
 			Button select_channel = new Gtk.Button();
 			select_channel.image = icon;
 
@@ -144,7 +151,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			});
 
 			//Channel subject button
-			channel_subject.image = new Image.from_file(Relay.get_asset_file("assets/help-info-symbolic.svg"));
+			channel_subject.image = new Image.from_resource("/com/github/raininja/assets/help-info-symbolic.svg");
 			channel_subject.tooltip_text = _("Channel subject");
 			var subject_popover = new Gtk.Popover(channel_subject);
 			channel_subject.clicked.connect(() => {
@@ -161,7 +168,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			toolbar.pack_end(channel_subject);
 
 			//Channel users button
-			channel_users.image = new Image.from_file(Relay.get_asset_file("assets/system-users.svg"));
+			channel_users.image = new Image.from_resource("/com/github/raininja/assets/system-users.svg");
 			channel_users.tooltip_text = _("Channel users");
 			channel_users.hide();
 			users_popover = new Gtk.Popover(channel_users);
@@ -221,7 +228,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			paste_box.pack_start(paste);
 			paste_box.show_all();
 			paste.focus_on_click = false;
-			var paste_img = new Image.from_file(Relay.get_asset_file("./assets/paste.png"));
+			var paste_img = new Image.from_resource("/com/github/raininja/assets/paste.png");
 			paste.set_image(paste_img);
 			paste.set_tooltip_text(_("Drag a files here to upload to Hastebin.com"));
 			paste.activate();
@@ -965,9 +972,9 @@ public class MainWindow : Gtk.ApplicationWindow
 		var title = _("Welcome to Relay");
 		var message =  _("Lets get started");
 		var welcome = new Widgets.Welcome(title, message);
-		welcome.append_with_image(new Image.from_file(Relay.get_asset_file("assets/manage-servers.png")), _("Manage"), _("Manage the servers you use"));
-		welcome.append_with_image(new Image.from_file(Relay.get_asset_file("assets/connect-server.png")), _("Connect"), _("Connect to a single server"));
-		welcome.append_with_image(new Image.from_file(Relay.get_asset_file("assets/saved-server.png")), _("Saved"), _(settings.get_bool("show_sidebar") ? _("Your sidepanel is already open") : _("Connect to a saved server")));
+		welcome.append_with_image(new Image.from_resource("/com/github/raininja/Relay/assets/manage-servers.png"), _("Manage"), _("Manage the servers you use"));
+		welcome.append_with_image(new Image.from_resource("/com/github/raininja/Relay/assets/connect-server.png"), _("Connect"), _("Connect to a single server"));
+		welcome.append_with_image(new Image.from_resource("/com/github/raininja/Relay/assets/saved-server.png"), _("Saved"), _(settings.get_bool("show_sidebar") ? _("Your sidepanel is already open") : _("Connect to a saved server")));
 
 		var tab = new Widgets.Tab();
 		tab.icon = null;
