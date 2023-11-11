@@ -25,14 +25,7 @@ unity_dep = dependency('unity')
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required: true)
 
-# install_subdir('assets', install_dir:join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay'))
-# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay','assets'),join_paths(meson.current_source_dir(),'src/assets','','*'))
-
-# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'com.github.raininja.relay'),join_paths(meson.current_source_dir(),'data/local','','*'))
-
-# meson.add_install_script(join_paths(meson.current_source_dir(),'meson_scripts','install_data.sh'),join_paths(get_option('prefix'),get_option('datadir'),'doc','com.github.raininja.relay'),join_paths(meson.current_source_dir(),'doc','','*'))
-
-# install_data('data/relay.desktop',install_dir:join_paths(get_option('prefix'),get_option('datadir'), 'applications'))
-# install_data('data/com.github.raininja.relay.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
-# meson.add_install_script('meson_scripts/install_schemas.sh')
+install_data('data/relay.desktop',install_dir:join_paths(get_option('prefix'),get_option('datadir'), 'applications'))
+install_data('data/com.github.raininja.relay.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
+meson.add_install_script('meson_scripts/install_schemas.sh')
 subdir('src')
