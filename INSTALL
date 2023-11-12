@@ -5,9 +5,9 @@ These are listed as Ubuntu packages. (They are reported to be the same on Arch
 Linux as well)  You may need to adjust for your distribution.
 To compile you will need the following dependencies:
 
-automake
+~~automake~~ meson
 libglib2.0-dev
-libx11-dev
+~~libx11-dev~~
 valac-0.26 
 libgranite-dev
 libsqlite3-dev
@@ -22,7 +22,7 @@ If you are on a distribution that uses apt-get you can use the following command
 (Other versions of valac may work. But newer versions seems to have a bug that prevents compiling)
 
 --------------------------------------------------------------------------------
-BUILDING AND INSTALLING
+BUILDING AND INSTALLING - DEPRECATED
 --------------------------------------------------------------------------------
 mkdir build
 cd build

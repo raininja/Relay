@@ -30,6 +30,7 @@ public class MainEntry : Entry {
         activate.connect(do_activate);
     }
 
+    //  keypress events are here, and borken
     public bool press_event (EventKey event) { 
         string? keyval = Gdk.keyval_name(event.keyval);
         switch (keyval) {

@@ -1,5 +1,33 @@
 # ![logo](https://cdn.rawgit.com/agronick/Relay/master/src/ui/relay.svg)  Relay 
 *Created by Kyle Agronick <agronick@gmail.com>*
+*D34dc0d3 rescued by denkijin <dandenkijin at gmail dot com>*
+
+This is a fork of Relay, I have a TO-DO list 
+
+- ~~asset management~~ 
+- proper password field
+- use side panel for settings/names list
+- hiding side panels
+- SSL connection, TLS certs
+- reconnection after sleep
+- toggle timestamps for messages
+- proper colors for indicators
+- SASL authentication
+- modularization
+- modify README.md 
+- fix bug where nickname is not shown on successive messages, and misalignment
+- handle various user commands such as /me /join correctly, do not sent to message tab, send to server tab
+- handle unicode characters properly
+- fix the topic, ?show topic in panel?
+- ~~fix panel icons~~
+- address colors of nicknames
+- address warnings for deprecations in GTK/Vala code
+- fix layout
+- fix arrow events in text entry area, in main_entry.vala
+- correct printing of unicode glyphs
+- font chooser dialog 
+- hardening
+- remove or option-ate the hastebin code
 
 This was a fun little project I made a few years ago. I don't have the time right now to maintain it. If anyone wants to take it over I'd be happy to give them access.
 

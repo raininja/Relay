@@ -33,7 +33,7 @@ public class ChannelTab : GLib.Object {
 	public Granite.Widgets.Tab tab;
 	public bool is_server_tab = false;
 	public bool has_subject = false;
-	public string channel_subject = "";
+	public string channel_topic = "";
 	public bool is_locked = false;
 	public LinkedList<string> users = new LinkedList<string>();
 	public LinkedList<string> ops = new LinkedList<string>();
@@ -83,10 +83,10 @@ public class ChannelTab : GLib.Object {
 	}
 
 	public void set_topic (string subject, bool append = false) {
-		channel_subject = append ? channel_subject + subject + "\n": subject;
+		channel_topic = append ? channel_topic + subject + "\n": subject;
 		has_subject = true;
 		Idle.add( () => { 
-			new_subject(tab_index, channel_subject);
+			new_subject(tab_index, channel_topic);
 			return false;
 		});
 	}

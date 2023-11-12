@@ -12,6 +12,7 @@
     <file compressed="true" preprocess="xml-stripblanks">assets/system-users.svg</file>
     <file compressed="true" preprocess="xml-stripblanks">assets/user-offline.svg</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/relay.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/relay.svg</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/server_window.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">ui/settings_window.ui</file>
     <file>assets/paste.png</file>

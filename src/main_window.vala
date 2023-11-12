@@ -30,13 +30,9 @@ using Unity;
 //  public class MainWindow : Object
 public class MainWindow : Gtk.ApplicationWindow
 {
-	//  public const string UI_FILE = Constants.PKGDATADIR + "/ui/" + "relay.ui";
-	//  public const string UI_FILE_SERVERS = Constants.PKGDATADIR + "ui/server_window.ui";
-	//  public const string UI_FILE_SETTINGS = Constants.PKGDATADIR + "ui/settings_window.ui";
 	public const string UI_FILE = "/com/github/raininja/Relay/ui/relay.ui";
 	public const string UI_FILE_SERVERS = "/com/github/raininja/Relay/ui/server_window.ui";
 	public const string UI_FILE_SETTINGS = "/com/github/raininja/Relay/ui/settings_window.ui";
- 
 
 	Relay app;
 	public static Gtk.Window window;
@@ -46,13 +42,16 @@ public class MainWindow : Gtk.ApplicationWindow
 	public static Icon loading_channel;
 	public static Icon channel_tab_icon_new_msg;
 	public static bool network_state = true;
+	public static Pixbuf pb_image_ct; 
+	public static Pixbuf pb_image_cu; 
+	public static Pixbuf pb_image_hb; 
 	Paned panel;
 	Gtk.Menu tab_rightclick = new Gtk.Menu();
 	Gtk.Menu tab_channel_list = new Gtk.Menu();
 	DragFile drag_file = new DragFile();
 	Button channel_users = new Button();
 	Label subject_text = new Label("");
-	Button channel_subject = new Button();
+	Button channel_topic = new Button();
 	HeaderBar toolbar = new HeaderBar ();
 
 	//User popover
@@ -83,10 +82,6 @@ public class MainWindow : Gtk.ApplicationWindow
 		try {
 			app = application;
 
-			//  inactive_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/user-offline.svg"));
-			//  active_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/user-idle.svg"));
-			//  loading_channel = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/channel-loading.svg"));
-
 			inactive_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/user-offline.svg");
 			active_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/user-idle.svg");
 			loading_channel = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/channel-loading.svg");
@@ -106,6 +101,8 @@ public class MainWindow : Gtk.ApplicationWindow
 				toolbar.decoration_layout = "";
 			else if (Relay.on_ubuntu)
 				toolbar.decoration_layout = "close,maximize";
+			else
+				toolbar.decoration_layout = "close,maximize";
 			
 			tabs.add_button_tooltip = _("Connect to a server");
 			tabs.add_button_visible = false;
@@ -120,19 +117,20 @@ public class MainWindow : Gtk.ApplicationWindow
 			settings.set_colors_defaults();
 	
 			window.destroy.connect(relay_close_program);
+			
 			application.add_window(window);
+			
 			var nb_wrapper = builder.get_object("notebook_wrapper") as Box;
 			nb_wrapper.pack_start(tabs, true, true, 0); 
 			tabs.show_all();
-			//  channel_tab_icon_new_msg = new Pixbuf.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/mail-unread.svg"));
 			channel_tab_icon_new_msg = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/mail-unread.svg");
+			
 			//Slide out panel
 			panel = builder.get_object("panel") as Paned;
 			var server_list_container = builder.get_object("server_list_container") as Box;
 			server_list_container.pack_start(servers, true, true, 0);
 
 			//Slide out panel button
-			//  Image icon = new Image.from_file(Relay.get_asset_file(Constants.PKGDATADIR + "/assets/server-icon" + (Relay.is_light_theme ? "-light" : "") + ".svg"));
 			Image icon = new Image.from_resource("/com/github/raininja/Relay/assets/server-icon" + (Relay.is_light_theme ? "-light" : "") + ".svg");
 			Button select_channel = new Gtk.Button();
 			select_channel.image = icon;
@@ -150,25 +148,27 @@ public class MainWindow : Gtk.ApplicationWindow
 				input.set_text("");
 			});
 
-			//Channel subject button
-			channel_subject.image = new Image.from_resource("/com/github/raininja/assets/help-info-symbolic.svg");
-			channel_subject.tooltip_text = _("Channel subject");
-			var subject_popover = new Gtk.Popover(channel_subject);
-			channel_subject.clicked.connect(() => {
+			// Channel topic button
+			pb_image_ct = new Pixbuf.from_resource ("/com/github/raininja/Relay/assets/help-info-symbolic.svg");
+			channel_topic.image = new Image.from_pixbuf (pb_image_ct);
+			channel_topic.tooltip_text = _("Channel topic");
+			var subject_popover = new Gtk.Popover(channel_topic);
+			channel_topic.clicked.connect(() => {
 				subject_popover.show_all();
 			});
-			channel_subject.set_no_show_all(true);
-			channel_subject.hide();
+			channel_topic.set_no_show_all(true);
+			channel_topic.hide();
 			var scrolled = new ScrolledWindow(null, null);
 			subject_text.set_line_wrap(true);
 			subject_text.margin = 10;
 			scrolled.set_size_request(320, 110);
 			scrolled.add(subject_text);
 			subject_popover.add(scrolled);
-			toolbar.pack_end(channel_subject);
+			toolbar.pack_end(channel_topic);
 
-			//Channel users button
-			channel_users.image = new Image.from_resource("/com/github/raininja/assets/system-users.svg");
+			// Channel users button
+			pb_image_cu = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/system-users.svg");
+			channel_users.image = new Image.from_pixbuf (pb_image_cu);
 			channel_users.tooltip_text = _("Channel users");
 			channel_users.hide();
 			users_popover = new Gtk.Popover(channel_users);
@@ -213,7 +213,7 @@ public class MainWindow : Gtk.ApplicationWindow
 
 			servers.item_selected.connect(set_item_selected);
 
-			set_up_add_sever(builder);
+			set_up_add_server(builder);
 
 			toolbar.set_title(Constants.RELEASE_NAME);
 
@@ -228,7 +228,8 @@ public class MainWindow : Gtk.ApplicationWindow
 			paste_box.pack_start(paste);
 			paste_box.show_all();
 			paste.focus_on_click = false;
-			var paste_img = new Image.from_resource("/com/github/raininja/assets/paste.png");
+			pb_image_hb = new Pixbuf.from_resource("/com/github/raininja/Relay/assets/paste.png");
+			var paste_img = new Image.from_pixbuf (pb_image_hb);
 			paste.set_image(paste_img);
 			paste.set_tooltip_text(_("Drag a files here to upload to Hastebin.com"));
 			paste.activate();
@@ -279,6 +280,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			error("Could not load UI: %s\n", e.message);
 		}
 
+		//  Does this belong here? or in connection.vala or ??
 		var network_monitor = NetworkMonitor.get_default();
 		network_monitor.network_changed.connect( (on)=> {
 			if (!on) {
@@ -349,7 +351,7 @@ public class MainWindow : Gtk.ApplicationWindow
 			output.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
 			output.set_left_margin(IRC.USER_WIDTH);
 			output.set_indent(IRC.USER_WIDTH * -1);
-			output.override_font(FontDescription.from_string("Inconsolata 12"));
+			output.override_font(FontDescription.from_string("Droid Sans Mono 12"));
 
 
 			
@@ -488,7 +490,7 @@ public class MainWindow : Gtk.ApplicationWindow
 				outputs[last_tab].needs_spacer = true;
 		}
 		if (new_tab.label == _("Welcome")) {
-			channel_subject.hide();
+			channel_topic.hide();
 			channel_users.hide();
 			input.hide();
 			toolbar.set_title(Constants.RELEASE_NAME);
@@ -516,9 +518,9 @@ public class MainWindow : Gtk.ApplicationWindow
 		}
 
 		if (using_tab.has_subject) 
-			new_subject(current_tab, using_tab.channel_subject.validate(-1) ? using_tab.channel_subject : using_tab.channel_subject.escape(""));
+			new_subject(current_tab, using_tab.channel_topic.validate(-1) ? using_tab.channel_topic : using_tab.channel_topic.escape(""));
 		else
-			channel_subject.hide();
+			channel_topic.hide();
 
 		if (using_tab.is_server_tab) {
 			toolbar.set_title(using_tab.tab.label);
@@ -940,7 +942,7 @@ public class MainWindow : Gtk.ApplicationWindow
 		*/
 		string url = (outputs[tab_id].channel_url != "") ? "\n\n" + outputs[tab_id].channel_url : "";
 		subject_text.set_text(message + url);
-		channel_subject.show();
+		channel_topic.show();
 	}
 
 	public static void fill_input (string message) {
@@ -1001,7 +1003,7 @@ public class MainWindow : Gtk.ApplicationWindow
 		});
 	}
 
-	public void set_up_add_sever (Builder builder) {
+	public void set_up_add_server (Builder builder) {
 		var add_server_button = builder.get_object("manage_servers") as Button;
 
 		add_server_button.button_release_event.connect( (event) => {
