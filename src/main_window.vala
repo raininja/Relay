@@ -25,7 +25,7 @@ using Gdk;
 using Gee;
 using Granite;
 using Pango;
-using Unity; 
+//  using Unity; 
 
 //  public class MainWindow : Object
 public class MainWindow : Gtk.ApplicationWindow
@@ -70,7 +70,7 @@ public class MainWindow : Gtk.ApplicationWindow
 	public static SqlClient sql_client = SqlClient.get_instance();
 	public static Settings settings = new Settings();
 	public static ServerManager server_manager = new ServerManager();
-	public static Unity.LauncherEntry launcher = Unity.LauncherEntry.get_for_desktop_id(Constants.RELEASE_NAME + ".desktop");
+	//  public static Unity.LauncherEntry launcher = Unity.LauncherEntry.get_for_desktop_id(Constants.RELEASE_NAME + ".desktop");
 
 	Gee.HashMap<int, ChannelTab> outputs = new Gee.HashMap<int, ChannelTab> ();
 	Gee.HashMap<string, Connection> clients = new Gee.HashMap<string, Connection> (); 
@@ -512,7 +512,7 @@ public class MainWindow : Gtk.ApplicationWindow
 
 		if (items_sidebar.has_key(using_tab.tab.label)) {
 			items_sidebar[using_tab.tab.label].badge = "";
-			refresh_icon(using_tab.message_count * -1);
+			//  refresh_icon(using_tab.message_count * -1);
 			using_tab.message_count = 0;
 			servers.selected = items_sidebar[using_tab.tab.label];
 		}
@@ -837,7 +837,7 @@ public class MainWindow : Gtk.ApplicationWindow
 
 				tab.tab.icon = channel_tab_icon_new_msg;
 
-				refresh_icon(1);
+				//  refresh_icon(1);
 
 				return false;
 			});
@@ -847,12 +847,12 @@ public class MainWindow : Gtk.ApplicationWindow
 
 /* Unity function.  refreshes icon? */
 
-    public void refresh_icon (int add) {
-		launcher.count += add;
-		launcher.count_visible = (launcher.count > 0);
-		launcher.urgent = true;
-		launcher.urgent = false;
-	}
+    //  public void refresh_icon (int add) {
+		//  launcher.count += add;
+		//  launcher.count_visible = (launcher.count > 0);
+		//  launcher.urgent = true;
+		//  launcher.urgent = false;
+	//  }
 
 
 	public void send_text_out (string text) {

@@ -25,6 +25,7 @@ using Gee;
 public class Connection : Object
 {
 
+	//  hardcoded default port should go to encrypted 
 	public const uint16 DEFAULT_PORT = 6667; /*default port also defined in irc.vala */
 	private DataInputStream input_stream;
 	private DataOutputStream output_stream;
@@ -35,6 +36,11 @@ public class Connection : Object
 	public bool error_state = false;
 	public bool autoconnect_ran = false;
 	public SqlClient.Server server;
+	public DateTime pingstamp;  // for lag measurement
+	public DateTime pongstamp;  // for lag measurement
+	public TimeSpan lag_measure; // for lag measurement readout option
+
+
 
 	public signal void new_tab(ChannelTab tab, string name);
 	public signal void new_message(ChannelTab? tab, Message message, bool is_error = false);
@@ -139,7 +145,8 @@ public class Connection : Object
 				handle_ping(ref message);
 				return;
 			case "PONG":
-				info(msg);
+				handle_pong(ref message, out lag_measure);
+				//  info(msg);
 				return;
 			case IRC.PRIVATE_MESSAGE: 
 				ChannelTab tab = add_channel_tab(message.parameters[0]);
@@ -160,7 +167,9 @@ public class Connection : Object
 					tab.channel_url =  message.message;
 				return;
 			case IRC.RPL_LUSERCLIENT:
-			case "NOTICE":
+			case IRC.NOTICE:
+				server_tab.display_message(message);
+				return;			
 			case IRC.RPL_MOTD:
 			case IRC.RPL_MOTDSTART:
 			case IRC.RPL_YOURHOST:
@@ -210,6 +219,8 @@ public class Connection : Object
 				if (tab != server_tab && tab != null && message.user_name != null && message.user_name.length > 0)
 					tab.user_join_channel(message.user_name);
 				return;
+			//  case IRC.ACTION:
+				//  var tab = find_channel_tab (message.get_msg_txt());
 			case IRC.RPL_ENDOFNAMES:
 				var tab = find_channel_tab(message.parameters[1]);
 				if (tab != null)
@@ -245,6 +256,9 @@ public class Connection : Object
 			case IRC.ERR_NONONREG:
 				new_message(find_channel_tab(message.parameters[0]), message, true);
 				return;
+			case IRC.CAP:
+				// here we need to parse the capability string and act accordingly
+				// first should be SASL handshake
 			default:
 				if (message.command == null)
 					message.command = "0";
@@ -263,11 +277,17 @@ public class Connection : Object
 		} 
 	}
 
-	public void do_register () {
-		send_output("PASS  " + ((server.password.length > 0) ? server.password : "-p"));
+	// The client should not immediately pass a server password! there needs to be logic
+	// also, the function is poorly named as this is not registration at all. 
+	// ACTUALLY: in the irc protocol the client registers to the server
+	public void do_register () { // here should go the client capability negotiation ? 
+		send_output ("CAP LS 302");
+		//  send_output("PASS  " + ((server.password.length > 0) ? server.password : "-p"));
 		send_output("NICK " + server.nickname);
 		send_output("USER " + server.username + " 0 * :" + server.realname);
-		send_output("MODE " + server.username + " +i");
+		//  send_output ("PASS " + server.password);
+		//  send_output("MODE " + server.username + " +i");
+		send_output ("CAP END");
 	}
 
 	public void do_autoconnect () {
@@ -339,7 +359,15 @@ public class Connection : Object
 	}
 	
 	private void handle_ping (ref Message msg) {
+		pingstamp = new DateTime.now_local();
 		send_output("PONG " + msg.message);
+	}
+
+	public int64 handle_pong (ref Message msg, out TimeSpan lag_measure) {
+		pongstamp = new DateTime.now_local();
+		lag_measure = pingstamp.difference (pingstamp);
+		info(msg.message);
+		return lag_measure;
 	}
 
 	public void join (string channel) {
@@ -370,7 +398,7 @@ public class Connection : Object
 
 		foreach (string chan in channel_autoconnect)
 			turn_off_icon(chan);
-		
+		//  make exit message editable
 		send_output("QUIT :" + _("Relay, an IRC client for the modern desktop"));
 		stop();
 	}

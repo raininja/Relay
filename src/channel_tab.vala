@@ -47,8 +47,9 @@ public class ChannelTab : GLib.Object {
 	public string channel_url = "";
 	public bool needs_spacer = false;
 
-	//  public static int64 timeval = get_real_time();
-	public TimeVal timeval = TimeVal();
+	public static int64 timeval = get_monotonic_time();
+	//  public TimeVal timeval = TimeVal();
+
 	public static int timestamp_seconds = 180;
 	private long last_timestamp = 0;
 	private string last_user = "";
@@ -268,6 +269,8 @@ public class ChannelTab : GLib.Object {
 			formatted_message =  parse_message_cmd(message);
 		} else if (message.length > 5 && message[0:5] == "/nick") {
 			formatted_message = parse_nick_change(message);
+		//  } else if (message.length > 3 && message[0:3] == "/me")
+					//  formatted_message = parse_action(message); 
 		} else {
 			if (is_server_tab) {
 				formatted_message = format_server_msg(message);
@@ -296,7 +299,7 @@ public class ChannelTab : GLib.Object {
 
 	public string format_server_msg (string message) {
 		if (message[0] != '/') {
-			add_with_tag(_("Start you command with a / to send it \n"), error_tag);
+			add_with_tag(_("This is not a message window. Start your command with a / to send it \n"), error_tag);
 			return "";
 		}
 		return message.substring(1); 
@@ -323,6 +326,7 @@ public class ChannelTab : GLib.Object {
 			default: 
 				add_with_tag(message.message, full_width_tag);
 				break;
+			//  case "ACTION":
 		} 
 	}
 
@@ -365,8 +369,8 @@ public class ChannelTab : GLib.Object {
 		if (!MainWindow.settings.get_bool("show_datestamp"))
 			return false;
 		
-		//  timeval.get_real_time();
-		long current = timeval.tv_sec;
+			long current = (long) timeval;
+		//  long current = timeval.tv_sec;
 		if (current - last_timestamp > timestamp_seconds) {
 			var local = new GLib.DateTime.now_local();
 			string datetime = local.format(date_format + " "  + time_format) + "\n";
@@ -559,7 +563,7 @@ public class ChannelTab : GLib.Object {
 				return false;
 			
 			Granite.Services.System.open_uri(link);
-			//  AppInfo.launch_default_for_uri(link, null, );
+			//  AppInfo.launch_default_for_uri_async(link, null, );
 		}
 		return false;
 	}

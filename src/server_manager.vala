@@ -43,6 +43,8 @@ public class ServerManager : Object
 	TextView connect_cmds;
 	Grid form;
 	SqlClient.Server current_server = null;
+	Pixbuf pb_server_image_add;
+	Pixbuf pb_server_image_remove;
 	bool none_selected = false;
 	public char[] CHANNEL_CHAR = {'&', '#', '+', '!'};
 
@@ -91,9 +93,11 @@ public class ServerManager : Object
 		servers.row_selected.connect(clear_row);
 
 		var add_server = new Gtk.Button();
-		add_server.image = new Image.from_resource("/com/github/raininja/assets/list-add-symbolic.svg");
+		pb_server_image_add = new Pixbuf.from_resource ("/com/github/raininja/Relay/assets/list-add-symbolic.svg");
+		add_server.image = new Image.from_pixbuf (pb_server_image_add);
 		var remove_server = new Gtk.Button();
-		remove_server.image = new Image.from_resource("/com/github/raininja/assets/list-remove-symbolic.svg");
+		pb_server_image_remove = new Pixbuf.from_resource ("/com/github/raininja/Relay/assets/list-remove-symbolic.svg");
+		remove_server.image = new Image.from_pixbuf (pb_server_image_remove);
 		server_btns.pack_end(add_server, false, false, 0);
 		server_btns.pack_end(remove_server, false, false, 0);
 
@@ -371,3 +375,4 @@ public class ServerManager : Object
 		return false;
 	}
 }
+ 

@@ -207,8 +207,9 @@ public class Relay : Gtk.Application {
 
 		if (output != null && output.contains ("Pantheon")) {  
 			on_elementary = true;
-		}else if (output != null && (output.contains ("Unity") || output.contains ("XFCE")))
-            on_ubuntu = true;
+		}
+        //  else if (output != null && (output.contains ("Unity") || output.contains ("XFCE")))
+            //  on_ubuntu = true;
         else if (output == "KDE")
             on_kde = true;
 	}

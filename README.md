@@ -28,6 +28,7 @@ This is a fork of Relay, I have a TO-DO list
 - font chooser dialog 
 - hardening
 - remove or option-ate the hastebin code
+- more!
 
 This was a fun little project I made a few years ago. I don't have the time right now to maintain it. If anyone wants to take it over I'd be happy to give them access.
 
@@ -52,16 +53,17 @@ commands on a platform that uses apt-get:
 ```    
 
 * **Website**  
-The project's oficial website is https://poisonpacket.wordpress.com/relay/
+~~The project's oficial website is https://poisonpacket.wordpress.com/relay/~~
 
 * **Bugs**  
-Please report bugs at https://github.com/agronick/Relay
-
+~~Please report bugs at https://github.com/agronick/Relay~~
+Report bugs here on github.
 * **Translations**  
-To contribute translations please visit http://translations.launchpad.net/relay
+~~To contribute translations please visit http://translations.launchpad.net/relay~~
+Translations can be offered as issues on github.
 
 * **Donations**  
-If you want to support the project, please consider a donation at https://poisonpacket.wordpress.com/relay/
+~~If you want to support the project, please consider a donation at https://poisonpacket.wordpress.com/relay/~~
 
 * **Further documentation**  
-For more documentation visit https://poisonpacket.wordpress.com/relay/
+For more documentation visit https://poisonpacket.wordpress.com/relay/ <= this page is up as of 11 November 2023

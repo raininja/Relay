@@ -189,8 +189,18 @@ public class SqlClient : Object
 	}
 
 	public class Server{
-
-		public const string[] keys = {"host", "port", "nickname", "realname", "username", "password", "on_connect", "encryption", "validate_server", "autoconnect", "connect_cmds"};
+		// what other server keys are needed? 
+		public const string[] keys = {"host", 
+									  "port", 
+									  "nickname", 
+									  "realname", 
+									  "username", 
+									  "password", 
+									  "on_connect", 
+									  "encryption", 
+									  "validate_server", 
+									  "autoconnect", 
+									  "connect_cmds"};
 
 		public int id = -1;
 		public string host = "";
@@ -271,7 +281,7 @@ public class SqlClient : Object
 					critical (db.errmsg ());
 					return -1;
 				}
-
+				// if we add server keys, we must also modify this inding array
 				stmt.bind_text(1, svr.host);
 				stmt.bind_int(2, svr.port);
 				stmt.bind_text(3, svr.nickname);

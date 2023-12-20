@@ -29,11 +29,11 @@ public class Message : GLib.Object {
     public bool internal = false;
     public bool usr_private_message = false;
     private static Regex? regex;
-    private static Regex? fix_message;
+    //  private static Regex? fix_message;
 
     private static string regex_string = """^(:(?<prefix>\S+) )?(?<command>\S+)( (?!:)(?<params>.+?))?( :(?<trail>.+))?$""";
-    private static string replace_string = """[\x00-\x1F\x80-\xFF]""";
-    public static string[] user_cmds = {IRC.PRIVATE_MESSAGE, IRC.JOIN_MSG, IRC.USER_NAME_CHANGED, IRC.QUIT_MSG, IRC.PART_MSG};
+    //  private static string replace_string = """[\x00-\x1F\x80-\xFF]""";
+    public static string[] user_cmds = {IRC.PRIVATE_MESSAGE, IRC.JOIN_MSG, IRC.USER_NAME_CHANGED, IRC.QUIT_MSG, IRC.PART_MSG, IRC.ACTION};
 
     public Message (string _message = "") {
         if (regex == null) {
@@ -45,7 +45,7 @@ public class Message : GLib.Object {
         }
         if (_message.length == 0)
             return;
-		try{
+		try {
 			message = _message.validate() ? _message : _message.escape("\b\f\n\r\t\'"); 
 		} catch (RegexError e) {
 			message = _message;
@@ -106,5 +106,9 @@ public class Message : GLib.Object {
             warning("Regex error with " + message);
         }
     }
+
+    //  public void parse_action () {
+
+    //  }
 }
 
