@@ -21,7 +21,7 @@ harfbuzz_gobject_dep = dependency('harfbuzz-gobject')
 pango_dep = dependency('pango')
 pangocairo_dep = dependency('pangocairo')
 sqlite3_dep = dependency('sqlite3')
-unity_dep = dependency('unity')
+# unity_dep = dependency('unity')
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required: true)
 
