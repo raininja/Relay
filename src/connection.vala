@@ -38,8 +38,8 @@ public class Connection : Object
 	public SqlClient.Server server;
 	public DateTime pingstamp;  // for lag measurement
 	public DateTime pongstamp;  // for lag measurement
-	public TimeSpan lag_measure; // for lag measurement readout option
-
+	//  public TimeSpan lag_measure; // for lag measurement readout option
+	public string lag_stamp;
 
 
 	public signal void new_tab(ChannelTab tab, string name);
@@ -61,8 +61,6 @@ public class Connection : Object
 			Resolver resolver = Resolver.get_default ();
 			GLib.List<InetAddress> addresses = resolver.lookup_by_name(server.host, null);
 			InetAddress address = addresses.nth_data (0);
-
- 
 			SocketClient client = new SocketClient ();
 			client.set_tls(server.encryption);
 			//  client.set_tls_validation_flags(TlsCertificateFlags.UNKNOWN_CA);
@@ -79,6 +77,8 @@ public class Connection : Object
 				server.realname = server.nickname;
 				
 			do_register();
+			// authenticate?
+			//  do_capability_negotiation();
 
 			string? line = "";
 			do{
@@ -145,7 +145,7 @@ public class Connection : Object
 				handle_ping(ref message);
 				return;
 			case "PONG":
-				handle_pong(ref message, out lag_measure);
+				handle_pong(ref message);
 				//  info(msg);
 				return;
 			case IRC.PRIVATE_MESSAGE: 
@@ -168,16 +168,19 @@ public class Connection : Object
 				return;
 			case IRC.RPL_LUSERCLIENT:
 			case IRC.NOTICE:
-				server_tab.display_message(message);
-				return;			
+				//  server_tab.display_message(message);
+				//  return;
 			case IRC.RPL_MOTD:
 			case IRC.RPL_MOTDSTART:
+			case IRC.RPL_TOPICWHOTIME:
 			case IRC.RPL_YOURHOST:
 			case IRC.RPL_LUSEROP:
 			case IRC.RPL_LUSERUNKNOWN:
 			case IRC.RPL_LUSERCHANNELS:
 			case IRC.RPL_UMODEIS: //maybe a tab
 			case IRC.RPL_SERVLIST:
+			case IRC.RPL_LIST:
+			case IRC.RPL_LISTEND:			
 			case IRC.RPL_ENDOFSTATS:
 			case IRC.RPL_STATSLINKINFO:
 				server_tab.display_message(message);
@@ -290,6 +293,10 @@ public class Connection : Object
 		send_output ("CAP END");
 	}
 
+	public void do_capability_negotiation() {
+		// regex to parse 
+	}
+	
 	public void do_autoconnect () {
 		autoconnect_ran = true;
 		foreach (var chan in channel_autoconnect) {
@@ -297,7 +304,7 @@ public class Connection : Object
 		}
 		Gdk.threads_add_timeout_seconds(25, ()=> {
 			foreach (var chan in channel_autoconnect) {
-					change_channel_state(chan, "stuck");
+					change_channel_state(chan, "stuck"); // what is this state "stuck"
 			}
 			return false;
 		});
@@ -360,14 +367,18 @@ public class Connection : Object
 	
 	private void handle_ping (ref Message msg) {
 		pingstamp = new DateTime.now_local();
+		string lag_stamp = pingstamp.format ("%Y-%m-%d %H:%M:%S"); 
 		send_output("PONG " + msg.message);
+		debug (lag_stamp);
 	}
 
-	public int64 handle_pong (ref Message msg, out TimeSpan lag_measure) {
+	private void handle_pong (ref Message msg) {
 		pongstamp = new DateTime.now_local();
-		lag_measure = pingstamp.difference (pingstamp);
-		info(msg.message);
-		return lag_measure;
+		var lag_measure_stamp = pongstamp.difference (pingstamp);
+		var lag_measure = lag_measure_stamp.to_string( "%H:%M:%S" );
+		info(msg.message + " " + lag_measure);
+		debug(lag_measure);
+		//  return;
 	}
 
 	public void join (string channel) {

@@ -18,6 +18,7 @@
  */
 
 public class IRC {
+	
 	// Configuration Items
 	public const uint16 DEFAULT_PORT = 6667; // NOT USED
 	public const uint16 DEFAULT_INSECURE_PORT = 6667; // NOT USED
@@ -32,8 +33,7 @@ public class IRC {
 	public const string RPL_YOURHOST = 		"002";
 	public const string RPL_CREATED = 		"003";
 	public const string RPL_MYINFO = 		"004";
-	//  public const string RPL_BOUNCE = 	  	"005";
-    public const string RPL_ISUPPORT = 		"005"; // 
+    public const string RPL_ISUPPORT = 		"005";
 	public const string RPL_STATSLINKINFO = "211";
 	public const string RPL_STATSCOMMANDS = "212";
 	public const string RPL_ENDOFSTATS = 	"219";
@@ -207,6 +207,7 @@ public class IRC {
     public const string ERR_SASLTOOLONG = 		"905";
     public const string ERR_SASLABORTED = 		"906";
     public const string ERR_SASLALREADY = 		"907";
+	
 
 	public static string remove_user_prefix (string name) {
 		if (user_prefixes.index_of_char(name[0]) != -1)

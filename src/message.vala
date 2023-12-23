@@ -30,8 +30,10 @@ public class Message : GLib.Object {
     public bool usr_private_message = false;
     private static Regex? regex;
     //  private static Regex? fix_message;
+    public DateTime rawstamp;
+    public string timestamp;
 
-    private static string regex_string = """^(:(?<prefix>\S+) )?(?<command>\S+)( (?!:)(?<params>.+?))?( :(?<trail>.+))?$""";
+    private static string regex_string = """^(:(?<prefix>\S+) )?(?<command>\S+)( (?!:)(?<params>.+?))?( :(?<body>.+))?$""";
     //  private static string replace_string = """[\x00-\x1F\x80-\xFF]""";
     public static string[] user_cmds = {IRC.PRIVATE_MESSAGE, IRC.JOIN_MSG, IRC.USER_NAME_CHANGED, IRC.QUIT_MSG, IRC.PART_MSG, IRC.ACTION};
 
@@ -47,10 +49,12 @@ public class Message : GLib.Object {
             return;
 		try {
 			message = _message.validate() ? _message : _message.escape("\b\f\n\r\t\'"); 
-		} catch (RegexError e) {
-			message = _message;
-		}
+		} finally {
+        //  catch (GLib.Error e){
+			//  message = _message;
+		//  }
         parse_regex();
+        }
     }
 
     public string get_prefix_name () {
@@ -91,19 +95,21 @@ public class Message : GLib.Object {
                 command = mi.fetch_named ("command");
 				if (mi.fetch_named ("params") != null)
             		parameters = mi.fetch_named ("params").split(" ");
-                message = mi.fetch_named ("trail");
+                message = mi.fetch_named ("body");
 
                 if (message != null)
-                    message = message.replace("\t", "");
+                    message = message.replace("\t", " ");
 				if (prefix != null) {
 		            if (command in user_cmds)
 		                user_name_set(prefix.split("!")[0]);
-				}
+                    if (command == "322")
+                        message = (parameters[1] + " " + message);
+                    }
 
                 return false;
             });
         }catch (RegexError e){
-            warning("Regex error with " + message);
+            warning("Regex error in parse_regex with " + message);
         }
     }
 
